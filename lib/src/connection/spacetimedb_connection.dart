@@ -190,7 +190,7 @@ class SpacetimeDbConnection {
 
     try {
       final protocol = ssl ? 'wss' : 'ws';
-      var uri = Uri.parse('$protocol://$host/v1/database/$database/subscribe');
+      var uri = Uri.parse('$protocol://$host/v2/database/$database/subscribe');
 
       final headers = <String, dynamic>{};
 
@@ -208,7 +208,7 @@ class SpacetimeDbConnection {
 
       _channel = _socketFactory(
         uri,
-        ['v1.bsatn.spacetimedb'],
+        ['v2.bsatn.spacetimedb'],
         headers,
         connectTimeout: config.connectTimeout,
       );

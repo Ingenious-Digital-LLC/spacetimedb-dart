@@ -54,11 +54,11 @@ void main() {
 
   group('WebSocket Close Codes Investigation', () {
     test('1. Valid connection (no token) - connects successfully', () async {
-      final uri = Uri.parse('ws://$host/v1/database/$database/subscribe');
+      final uri = Uri.parse('ws://$host/v2/database/$database/subscribe');
 
       final channel = IOWebSocketChannel.connect(
         uri,
-        protocols: ['v1.bsatn.spacetimedb'],
+        protocols: ['v2.bsatn.spacetimedb'],
       );
 
       final completer = Completer<void>();
@@ -89,11 +89,11 @@ void main() {
     });
 
     test('2. Invalid token - HTTP 401 rejection (not WebSocket close code)', () async {
-      final uri = Uri.parse('ws://$host/v1/database/$database/subscribe');
+      final uri = Uri.parse('ws://$host/v2/database/$database/subscribe');
 
       final channel = IOWebSocketChannel.connect(
         uri,
-        protocols: ['v1.bsatn.spacetimedb'],
+        protocols: ['v2.bsatn.spacetimedb'],
         headers: {'Authorization': 'Bearer invalid_garbage_token_12345'},
       );
 
@@ -112,11 +112,11 @@ void main() {
     });
 
     test('3. Malformed Authorization header - HTTP 400 rejection', () async {
-      final uri = Uri.parse('ws://$host/v1/database/$database/subscribe');
+      final uri = Uri.parse('ws://$host/v2/database/$database/subscribe');
 
       final channel = IOWebSocketChannel.connect(
         uri,
-        protocols: ['v1.bsatn.spacetimedb'],
+        protocols: ['v2.bsatn.spacetimedb'],
         headers: {'Authorization': 'NotBearer malformed'},
       );
 
@@ -135,11 +135,11 @@ void main() {
     });
 
     test('4. Non-existent database - HTTP 400 rejection', () async {
-      final uri = Uri.parse('ws://$host/v1/database/nonexistent_db_xyz/subscribe');
+      final uri = Uri.parse('ws://$host/v2/database/nonexistent_db_xyz/subscribe');
 
       final channel = IOWebSocketChannel.connect(
         uri,
-        protocols: ['v1.bsatn.spacetimedb'],
+        protocols: ['v2.bsatn.spacetimedb'],
       );
 
       Object? caughtError;
@@ -157,7 +157,7 @@ void main() {
     });
 
     test('5. Wrong protocol - HTTP 400 rejection', () async {
-      final uri = Uri.parse('ws://$host/v1/database/$database/subscribe');
+      final uri = Uri.parse('ws://$host/v2/database/$database/subscribe');
 
       final channel = IOWebSocketChannel.connect(
         uri,
@@ -180,14 +180,14 @@ void main() {
 
     test('6. Network failure - throws exception (no close code)', () async {
       // 192.0.2.1 is TEST-NET-1, guaranteed non-routable
-      final uri = Uri.parse('ws://192.0.2.1:9999/v1/database/test/subscribe');
+      final uri = Uri.parse('ws://192.0.2.1:9999/v2/database/test/subscribe');
 
       Object? caughtError;
 
       try {
         final channel = IOWebSocketChannel.connect(
           uri,
-          protocols: ['v1.bsatn.spacetimedb'],
+          protocols: ['v2.bsatn.spacetimedb'],
           connectTimeout: const Duration(seconds: 3),
         );
 

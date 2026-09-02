@@ -17,6 +17,27 @@ class Identity {
     }
   }
 
+  /// Create an identity from its 64-character hex string, the inverse of
+  /// [toHexString]. This is what generated `fromJson` factories use to
+  /// restore identities from the offline cache.
+  ///
+  /// Throws [FormatException] if [hex] is not exactly 64 hex digits.
+  factory Identity.fromHex(String hex) {
+    final trimmed = hex.trim();
+    if (trimmed.length != 64 || !_hexPattern.hasMatch(trimmed)) {
+      throw FormatException(
+        'Identity hex must be exactly 64 hex digits, got "${hex.length > 80 ? '${hex.substring(0, 80)}…' : hex}"',
+      );
+    }
+    final bytes = Uint8List(32);
+    for (var i = 0; i < 32; i++) {
+      bytes[i] = int.parse(trimmed.substring(i * 2, i * 2 + 2), radix: 16);
+    }
+    return Identity(bytes);
+  }
+
+  static final _hexPattern = RegExp(r'^[0-9a-fA-F]{64}$');
+
   /// Full hex string representation (64 characters)
   ///
   /// Example: "2ab4c3d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3"

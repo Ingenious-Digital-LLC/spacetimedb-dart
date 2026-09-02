@@ -318,7 +318,9 @@ class TableGenerator {
       typeSpace: schema.typeSpace,
       typeDefs: schema.types,
     )) {
-      return "json['$fieldName']";
+      // toJson writes `toHexString`; assigning that String straight to an
+      // Identity field made every offline-cache load throw after relaunch.
+      return "Identity.fromHex(json['$fieldName'] as String)";
     }
 
     final dartType = TypeMapper.toDartType(

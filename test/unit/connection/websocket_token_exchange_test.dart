@@ -49,6 +49,7 @@ SpacetimeDbConnection _connection({
       autoReconnect: false,
       maxReconnectAttempts: 0,
       connectTimeout: Duration(milliseconds: 200),
+      compression: MessageCompression.none,
     ),
     socketFactory: (uri, protocols, headers, {connectTimeout = const Duration(seconds: 10)}) =>
         _refusingSocket(attempts, uri, protocols, headers, connectTimeout: connectTimeout),
@@ -107,6 +108,8 @@ void main() {
       expect(calls, 3);
       expect(attempts, hasLength(1));
       expect(attempts.single.uri.queryParameters['token'], 'minted-ws-token');
+      expect(attempts.single.uri.queryParameters['compression'], 'None',
+          reason: 'the token must not clobber the compression parameter');
       expect(connection.status, ConnectionStatus.disconnected);
     });
 

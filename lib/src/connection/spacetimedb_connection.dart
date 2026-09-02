@@ -149,6 +149,14 @@ class SpacetimeDbConnection {
 
   bool get isConnected => _state == ConnectionState.connected;
 
+  /// The compression this connection asks the server for: the explicit
+  /// [ConnectionConfig.compression] if set, otherwise none on web (the
+  /// pure-Dart brotli decoder fails on larger frames under dart2js and there
+  /// is no web gzip decoder) and the server default elsewhere.
+  MessageCompression get effectiveCompression =>
+      config.compression ??
+      (kIsWeb ? MessageCompression.none : MessageCompression.serverDefault);
+
   /// The current authentication token, if any
   String? get token => _currentToken;
 
@@ -226,6 +234,12 @@ class SpacetimeDbConnection {
     try {
       final protocol = ssl ? 'wss' : 'ws';
       var uri = Uri.parse('$protocol://$host/v1/database/$database/subscribe');
+      final query = <String, String>{};
+
+      final compressionWire = effectiveCompression.wireValue;
+      if (compressionWire != null) {
+        query['compression'] = compressionWire;
+      }
 
       final headers = <String, dynamic>{};
 
@@ -233,11 +247,13 @@ class SpacetimeDbConnection {
       // doesn't support custom headers. Get a temporary token first. An
       // anonymous connection is only ever opened when no token is stored.
       if (_exchangeWebSocketToken && _currentToken != null) {
-        final wsToken = await _getWebSocketToken();
-        uri = uri.replace(queryParameters: {'token': wsToken});
+        query['token'] = await _getWebSocketToken();
       } else if (_currentToken != null) {
         // On native platforms, use Authorization header
         headers['Authorization'] = 'Bearer $_currentToken';
+      }
+      if (query.isNotEmpty) {
+        uri = uri.replace(queryParameters: query);
       }
 
       _channel = _socketFactory(

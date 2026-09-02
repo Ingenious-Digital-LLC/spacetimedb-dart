@@ -2,6 +2,26 @@
 ///
 /// Allows customization of reconnection strategy, heartbeat intervals,
 /// and other connection parameters.
+/// Which compression the client asks the server to apply to subscription
+/// and transaction frames (the `compression` query parameter of the
+/// `/subscribe` endpoint).
+enum MessageCompression {
+  /// Send no parameter; SpacetimeDB then picks its own default (Brotli).
+  serverDefault(null),
+
+  /// Uncompressed frames. The only option every platform can decode: the
+  /// pure-Dart brotli decoder mis-decodes larger frames under dart2js
+  /// ("Corrupted Huffman code histogram") and gzip has no web decoder.
+  none('None'),
+  gzip('Gzip'),
+  brotli('Brotli');
+
+  const MessageCompression(this.wireValue);
+
+  /// Value sent on the wire, or null for [serverDefault].
+  final String? wireValue;
+}
+
 class ConnectionConfig {
   /// Maximum number of reconnection attempts before giving up
   final int maxReconnectAttempts;
@@ -24,6 +44,11 @@ class ConnectionConfig {
   /// Timeout for initial WebSocket connection
   final Duration connectTimeout;
 
+  /// Compression requested from the server. `null` picks a per-platform
+  /// default: [MessageCompression.none] on web (see the enum docs) and
+  /// [MessageCompression.serverDefault] everywhere else.
+  final MessageCompression? compression;
+
   const ConnectionConfig({
     this.maxReconnectAttempts = 10,
     this.baseReconnectDelay = const Duration(seconds: 1),
@@ -32,6 +57,7 @@ class ConnectionConfig {
     this.pongTimeout = const Duration(seconds: 10),
     this.autoReconnect = true,
     this.connectTimeout = const Duration(seconds: 10),
+    this.compression,
   });
 
   /// Preset for mobile networks (more aggressive reconnection)
@@ -80,6 +106,7 @@ class ConnectionConfig {
         'pingInterval: $pingInterval, '
         'pongTimeout: $pongTimeout, '
         'autoReconnect: $autoReconnect, '
-        'connectTimeout: $connectTimeout)';
+        'connectTimeout: $connectTimeout, '
+        'compression: $compression)';
   }
 }

@@ -398,12 +398,13 @@ class TableGenerator {
       return '    _writeScheduleAt(encoder, $fieldName);';
     }
 
-    if (TypeMapper.isRefType(algebraicType)) {
-      return '    $fieldName.encode(encoder);';
-    }
-
-    final method = TypeMapper.getEncoderMethod(algebraicType);
-    return '    encoder.$method($fieldName);';
+    final encodeExpr = TypeMapper.getEncodeExpression(
+      fieldName,
+      algebraicType,
+      typeSpace: schema.typeSpace,
+      typeDefs: schema.types,
+    );
+    return '    $encodeExpr;';
   }
 
   String _getDecodeExpression(Map<String, dynamic> algebraicType) {
@@ -437,17 +438,11 @@ class TableGenerator {
       return '_readScheduleAt(decoder)';
     }
 
-    if (TypeMapper.isRefType(algebraicType)) {
-      final typeName = TypeMapper.toDartType(
-        algebraicType,
-        typeSpace: schema.typeSpace,
-        typeDefs: schema.types,
-      );
-      return '$typeName.decode(decoder)';
-    }
-
-    final method = TypeMapper.getDecoderMethod(algebraicType);
-    return 'decoder.$method()';
+    return TypeMapper.getDecodeExpression(
+      algebraicType,
+      typeSpace: schema.typeSpace,
+      typeDefs: schema.types,
+    );
   }
 
   String _getInlineWriteStatement(
@@ -462,12 +457,12 @@ class TableGenerator {
       return 'encoder.writeBytes($valueName.bytes)';
     }
 
-    if (TypeMapper.isRefType(algebraicType)) {
-      return '$valueName.encode(encoder)';
-    }
-
-    final method = TypeMapper.getEncoderMethod(algebraicType);
-    return 'encoder.$method($valueName)';
+    return TypeMapper.getEncodeExpression(
+      valueName,
+      algebraicType,
+      typeSpace: schema.typeSpace,
+      typeDefs: schema.types,
+    );
   }
 
   String _getInlineDecodeExpression(Map<String, dynamic> algebraicType) {
@@ -479,17 +474,11 @@ class TableGenerator {
       return 'Identity(decoder.readBytes(32))';
     }
 
-    if (TypeMapper.isRefType(algebraicType)) {
-      final typeName = TypeMapper.toDartType(
-        algebraicType,
-        typeSpace: schema.typeSpace,
-        typeDefs: schema.types,
-      );
-      return '$typeName.decode(decoder)';
-    }
-
-    final method = TypeMapper.getDecoderMethod(algebraicType);
-    return 'decoder.$method()';
+    return TypeMapper.getDecodeExpression(
+      algebraicType,
+      typeSpace: schema.typeSpace,
+      typeDefs: schema.types,
+    );
   }
 
   bool _isTimestamp(Map<String, dynamic> algebraicType) {

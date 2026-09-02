@@ -90,6 +90,47 @@ class DartGenerator {
       );
     }
 
+    // Generate files for every other named Product type not yet covered
+    // (real table, sum type enum, or view return type above). Without
+    // this, a struct nested only as a *field* of some other struct/table
+    // (e.g. a table row containing `Vec<SomeOtherStruct>`) never gets its
+    // own file, so the field that references it emits an import for a
+    // file the generator never produces, and the referencing file fails
+    // to compile. This mirrors the view-return-type loop above, just
+    // driven by "every named Product TypeDef" instead of "every view's
+    // return type".
+    for (final typeDef in schema.types) {
+      final typeRef = typeDef.typeRef;
+      if (generatedTypeRefs.contains(typeRef)) continue;
+      if (typeRef < 0 || typeRef >= schema.typeSpace.types.length) continue;
+      final resolved = schema.typeSpace.types[typeRef];
+      if (resolved.product == null) continue;
+      if (typeDef.name.isEmpty) continue;
+
+      generatedTypeRefs.add(typeRef);
+
+      final typeBaseName = _toSnakeCase(typeDef.name);
+      final syntheticTable = TableSchema(
+        name: typeBaseName,
+        productTypeRef: typeRef,
+        primaryKey: const [],
+        indexes: const [],
+        constraints: const [],
+        sequences: const [],
+        schedule: const {},
+        tableType: const {},
+        tableAccess: const {},
+      );
+
+      final generator = TableGenerator(schema, syntheticTable);
+      files.add(
+        GeneratedFile(
+          filename: '$typeBaseName.dart',
+          content: generator.generate(),
+        ),
+      );
+    }
+
     if (schema.reducers.isNotEmpty) {
       final generator = ReducerGenerator(
         schema.reducers,

@@ -190,6 +190,128 @@ class TypeMapper {
     throw UnsupportedError('No decoder method for type: $algebraicType');
   }
 
+  /// Get the full encode expression for a type, handling Array types
+  /// (recursively, via writeArray with a callback) and Ref types (nested
+  /// struct/enum values). For a Ref, which generated class method to call
+  /// depends on which generator produced the referenced type: see
+  /// [_refEncodeMethodName].
+  ///
+  /// Examples: 'encoder.writeU64(value)',
+  /// 'encoder.writeArray<Int64>(value, (item) => encoder.writeU64(item))',
+  /// 'value.encodeBsatn(encoder)'.
+  static String getEncodeExpression(
+    String valueName,
+    Map<String, dynamic> algebraicType, {
+    TypeSpace? typeSpace,
+    List<TypeDef>? typeDefs,
+  }) {
+    if (algebraicType.containsKey('Array')) {
+      final elementType =
+          (algebraicType['Array'] as Map).cast<String, dynamic>();
+      if (elementType.containsKey('U8')) {
+        return 'encoder.writeBytes($valueName)';
+      }
+      final innerDartType = toDartType(
+        elementType,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+      final innerExpr = getEncodeExpression(
+        'item',
+        elementType,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+      return 'encoder.writeArray<$innerDartType>($valueName, (item) => $innerExpr)';
+    }
+
+    if (isRefType(algebraicType)) {
+      final method = _refEncodeMethodName(algebraicType, typeSpace);
+      return '$valueName.$method(encoder)';
+    }
+
+    final method = getEncoderMethod(algebraicType);
+    return 'encoder.$method($valueName)';
+  }
+
+  /// Get the full decode expression for a type. See [getEncodeExpression].
+  /// Examples: 'decoder.readU64()',
+  /// 'decoder.readArray<Int64>(() => decoder.readU64())',
+  /// 'PlanetaryPositionWire.decodeBsatn(decoder)'.
+  static String getDecodeExpression(
+    Map<String, dynamic> algebraicType, {
+    TypeSpace? typeSpace,
+    List<TypeDef>? typeDefs,
+  }) {
+    if (algebraicType.containsKey('Array')) {
+      final elementType =
+          (algebraicType['Array'] as Map).cast<String, dynamic>();
+      if (elementType.containsKey('U8')) {
+        return 'decoder.readBytes()';
+      }
+      final innerDartType = toDartType(
+        elementType,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+      final innerExpr = getDecodeExpression(
+        elementType,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+      return 'decoder.readArray<$innerDartType>(() => $innerExpr)';
+    }
+
+    if (isRefType(algebraicType)) {
+      final typeName = toDartType(
+        algebraicType,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+      final method = _refDecodeMethodName(algebraicType, typeSpace);
+      return '$typeName.$method(decoder)';
+    }
+
+    final method = getDecoderMethod(algebraicType);
+    return 'decoder.$method()';
+  }
+
+  /// Whether a Ref type resolves to a Sum (enum) type in the typespace.
+  ///
+  /// Every named type this SDK's generator gives its own file to is
+  /// produced by exactly one of two generators, and they use different
+  /// instance-method names:
+  ///  - Sum (enum) types -> SumTypeGenerator -> plain `encode`/`decode`.
+  ///  - Product (struct) types -> TableGenerator, whether backed by a real
+  ///    table, a view's return type, or any other named struct -> always
+  ///    `encodeBsatn`/`decodeBsatn`, never `encode`/`decode`.
+  /// A Ref field's encode/decode call must match whichever of those two
+  /// the referenced type actually got, or the generated code simply won't
+  /// compile (the method it calls doesn't exist on the target class).
+  static bool _refIsSumType(
+    Map<String, dynamic> algebraicType,
+    TypeSpace? typeSpace,
+  ) {
+    if (typeSpace == null || !algebraicType.containsKey('Ref')) return false;
+    final typeIndex = algebraicType['Ref'] as int;
+    if (typeIndex < 0 || typeIndex >= typeSpace.types.length) return false;
+    return typeSpace.types[typeIndex].isSum;
+  }
+
+  static String _refEncodeMethodName(
+    Map<String, dynamic> algebraicType,
+    TypeSpace? typeSpace,
+  ) {
+    return _refIsSumType(algebraicType, typeSpace) ? 'encode' : 'encodeBsatn';
+  }
+
+  static String _refDecodeMethodName(
+    Map<String, dynamic> algebraicType,
+    TypeSpace? typeSpace,
+  ) {
+    return _refIsSumType(algebraicType, typeSpace) ? 'decode' : 'decodeBsatn';
+  }
+
   static bool isIdentityType(
     Map<String, dynamic> algebraicType, {
     TypeSpace? typeSpace,

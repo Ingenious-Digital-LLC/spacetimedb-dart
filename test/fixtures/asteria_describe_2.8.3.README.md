@@ -8,6 +8,6 @@ Captured from a real module's `spacetime describe --json` output, not hand-writt
 - **Contents:** 1 table (`birth_profile`, private), 2 reducers (`save_birth_profile`, `save_birth_profile_with_house_method`), 16 named types, and 4 `#[spacetimedb::procedure]` entries under a `Procedures` section this SDK does not yet model. No views: the module declares none.
 - **Why it matters:** this is the first real-world evidence that SpacetimeDB 2.8's `describe --json` output is shaped as `{"sections": [{"Typespace":...}, {"Types":...}, {"Tables":...}, {"Reducers":...}, {"Procedures":...}, {"ExplicitNames":...}]}`, not the flat `tables`/`reducers`/`types`/`typespace` root-key shape `DatabaseSchema.fromJson` previously required. Against this exact fixture, the generator (`dart run spacetimedb:generate`) reported `Tables: 0, Reducers: 0, Views: 0, Types: 0` with no error before this fix.
 
-## Known gap
+## Views gap — resolved
 
-No real 2.8+ `sections`-shaped describe output containing a view has been captured yet — the source module above declares none. `database_schema_test.dart` documents the current (untested-against-reality) fallback behavior and is written to be extended once one is available, e.g. from Asteria's `feat/module-client-views` branch after it publishes a module with a view.
+This fixture's module declares no views, so it can't cover the `Views` section. That gap is now closed by `asteria_module_views_describe.json`, captured from Asteria's `feat/module-client-views` branch once it published a module with two public views. See that fixture's README — it also documents a real parser bug the first attempt at "best-effort" views handling had (assumed a `{"View": {...}}` wrapper that the real `Views` section does not use).

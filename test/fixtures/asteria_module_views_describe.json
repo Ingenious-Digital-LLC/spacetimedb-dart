@@ -1,0 +1,3615 @@
+{
+  "sections": [
+    {
+      "Typespace": {
+        "types": [
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "owner_identity"
+                  },
+                  "algebraic_type": {
+                    "Product": {
+                      "elements": [
+                        {
+                          "name": {
+                            "some": "__identity__"
+                          },
+                          "algebraic_type": {
+                            "U256": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "profile_version"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "local_date"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "place_label"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "latitude_e_6"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_e_6"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "timezone"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "time_confidence"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "local_minute_of_day"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U16": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "uncertainty_minutes"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U16": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "fold"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U8": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "input_fingerprint"
+                  },
+                  "algebraic_type": {
+                    "U64": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "commit_token"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "house_method_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reason"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "validation_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "complete"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_revision"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "calculated_at"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "engine_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "engine_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "policy_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "policy_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_policy_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "stationary_threshold_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "contract_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "sources"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 2
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "moon_phase"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "moon_sign"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "next_lunar_transition"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "Ref": 3
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "retrogrades_complete"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "planetary_motion"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 4
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "provider"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "dataset_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "checksum"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "kind"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "not_before"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "not_after"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "label"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "body"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitudinal_motion_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_state"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reason"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "commit_token"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "profile_version"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "input_fingerprint"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U64": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "validation_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "complete"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "engine_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "engine_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "policy_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "policy_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_policy_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "stationary_threshold_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "contract_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "time_confidence"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "civil"
+                  },
+                  "algebraic_type": {
+                    "Ref": 6
+                  }
+                },
+                {
+                  "name": {
+                    "some": "positions_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "aspects_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "angles_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "houses_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "houses_omitted_reason"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "angles_omitted_reason"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "house_system_id"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "evaluated_sample_count"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_local_step_minutes"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U8": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "skipped_gap_samples"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U16": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "range_start_utc"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "range_end_utc"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reference_utc"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reference_is_illustrative"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "sources"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 2
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "positions"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 7
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "aspects"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 8
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "angles"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 9
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "houses"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 10
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "polar_houses"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "Ref": 11
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reason"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "timezone"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "utc_at"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "utc_offset_seconds"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "I32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "selected_fold"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U8": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "earlier_utc_at"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "later_utc_at"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "tzdb_version"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "dut_1_policy_id"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "body"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "sign"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "minimum_longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_span_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_crosses_zero"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "latitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "minimum_latitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_latitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitudinal_motion_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "minimum_motion_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_motion_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "I32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_state"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "changes_sign"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "house_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "house_number"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U8": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "first_body"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "second_body"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "kind"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "separation_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "deviation_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "orb_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "present_sample_count"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "total_sample_count"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "minimum_orb_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_orb_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reference_orb_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "kind"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "sign"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "minimum_longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_span_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_crosses_zero"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "changes_sign"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "house_number"
+                  },
+                  "algebraic_type": {
+                    "U8": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "sign"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "minimum_longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "maximum_longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_span_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_crosses_zero"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "changes_sign"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "contract_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "requested_method_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "effective_method_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "method_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "policy_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "policy_version"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_ids"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "String": []
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "geometry_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "wheel_projection"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "angles"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 12
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "crossings"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 13
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "missing_boundaries"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "U8": []
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "warnings"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 14
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "legacy_projection_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "legacy_projection_reason"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "kind"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reason"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "house_boundary"
+                  },
+                  "algebraic_type": {
+                    "U8": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "crossing_index"
+                  },
+                  "algebraic_type": {
+                    "U16": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "longitude_microdegrees"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "kind"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "code"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "message"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "boundary_ordinal"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "U8": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "angle_kind"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "reason"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "validation_status"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "complete"
+                  },
+                  "algebraic_type": {
+                    "Bool": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "body"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "search_days"
+                  },
+                  "algebraic_type": {
+                    "U16": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "transition"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "not_before"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "not_after"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "estimate"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_before_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "I32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_after_microdegrees_per_day"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "I32": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "solver_policy_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "tolerance_millis"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "motion_sample_window_millis"
+                  },
+                  "algebraic_type": {
+                    "U32": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "source_id"
+                  },
+                  "algebraic_type": {
+                    "Sum": {
+                      "variants": [
+                        {
+                          "name": {
+                            "some": "some"
+                          },
+                          "algebraic_type": {
+                            "String": []
+                          }
+                        },
+                        {
+                          "name": {
+                            "some": "none"
+                          },
+                          "algebraic_type": {
+                            "Product": {
+                              "elements": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "sources"
+                  },
+                  "algebraic_type": {
+                    "Array": {
+                      "Ref": 2
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Product": {
+              "elements": [
+                {
+                  "name": {
+                    "some": "owner_identity"
+                  },
+                  "algebraic_type": {
+                    "Product": {
+                      "elements": [
+                        {
+                          "name": {
+                            "some": "__identity__"
+                          },
+                          "algebraic_type": {
+                            "U256": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "commit_token"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "house_method_id"
+                  },
+                  "algebraic_type": {
+                    "String": []
+                  }
+                },
+                {
+                  "name": {
+                    "some": "computed_at"
+                  },
+                  "algebraic_type": {
+                    "Product": {
+                      "elements": [
+                        {
+                          "name": {
+                            "some": "__timestamp_micros_since_unix_epoch__"
+                          },
+                          "algebraic_type": {
+                            "I64": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": {
+                    "some": "result"
+                  },
+                  "algebraic_type": {
+                    "Ref": 5
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "Types": [
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "NatalChartResultRow"
+          },
+          "ty": 16,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "HouseCuspWire"
+          },
+          "ty": 10,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "LunarTransitionWire"
+          },
+          "ty": 3,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "EngineSourceWire"
+          },
+          "ty": 2,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PolarEclipticCrossingWire"
+          },
+          "ty": 13,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "DailySkyWireEnvelope"
+          },
+          "ty": 1,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "CivilResolutionWire"
+          },
+          "ty": 6,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "BirthProfileRow"
+          },
+          "ty": 0,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "NatalAspectWire"
+          },
+          "ty": 8,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PlanetaryStationWireEnvelope"
+          },
+          "ty": 15,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "NatalChartWireEnvelope"
+          },
+          "ty": 5,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PolarHouseWire"
+          },
+          "ty": 11,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PolarAngleWire"
+          },
+          "ty": 12,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PlanetaryMotionWire"
+          },
+          "ty": 4,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PlanetaryPositionWire"
+          },
+          "ty": 7,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "PolarHouseWarningWire"
+          },
+          "ty": 14,
+          "custom_ordering": true
+        },
+        {
+          "source_name": {
+            "scope": [],
+            "source_name": "NatalAngleWire"
+          },
+          "ty": 9,
+          "custom_ordering": true
+        }
+      ]
+    },
+    {
+      "Tables": [
+        {
+          "source_name": "birth_profile",
+          "product_type_ref": 0,
+          "primary_key": [
+            0
+          ],
+          "indexes": [
+            {
+              "source_name": {
+                "some": "birth_profile_owner_identity_idx_btree"
+              },
+              "accessor_name": {
+                "some": "owner_identity"
+              },
+              "algorithm": {
+                "BTree": [
+                  0
+                ]
+              }
+            }
+          ],
+          "constraints": [
+            {
+              "source_name": {
+                "some": "birth_profile_owner_identity_key"
+              },
+              "data": {
+                "Unique": {
+                  "columns": [
+                    0
+                  ]
+                }
+              }
+            }
+          ],
+          "sequences": [],
+          "table_type": {
+            "User": []
+          },
+          "table_access": {
+            "Private": []
+          },
+          "default_values": [
+            {
+              "col_id": 13,
+              "value": "08000000706c616369647573"
+            }
+          ],
+          "is_event": false
+        },
+        {
+          "source_name": "natal_chart_result",
+          "product_type_ref": 16,
+          "primary_key": [
+            0
+          ],
+          "indexes": [
+            {
+              "source_name": {
+                "some": "natal_chart_result_owner_identity_idx_btree"
+              },
+              "accessor_name": {
+                "some": "owner_identity"
+              },
+              "algorithm": {
+                "BTree": [
+                  0
+                ]
+              }
+            }
+          ],
+          "constraints": [
+            {
+              "source_name": {
+                "some": "natal_chart_result_owner_identity_key"
+              },
+              "data": {
+                "Unique": {
+                  "columns": [
+                    0
+                  ]
+                }
+              }
+            }
+          ],
+          "sequences": [],
+          "table_type": {
+            "User": []
+          },
+          "table_access": {
+            "Private": []
+          },
+          "default_values": [],
+          "is_event": false
+        }
+      ]
+    },
+    {
+      "Reducers": [
+        {
+          "source_name": "compute_natal_chart",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "commit_token"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "house_method_id"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              }
+            ]
+          },
+          "visibility": {
+            "ClientCallable": []
+          },
+          "ok_return_type": {
+            "Product": {
+              "elements": []
+            }
+          },
+          "err_return_type": {
+            "String": []
+          }
+        },
+        {
+          "source_name": "delete_birth_profile",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "commit_token"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              }
+            ]
+          },
+          "visibility": {
+            "ClientCallable": []
+          },
+          "ok_return_type": {
+            "Product": {
+              "elements": []
+            }
+          },
+          "err_return_type": {
+            "String": []
+          }
+        },
+        {
+          "source_name": "save_birth_profile",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "local_date"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "place_label"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "latitude_e6"
+                },
+                "algebraic_type": {
+                  "I32": []
+                }
+              },
+              {
+                "name": {
+                  "some": "longitude_e6"
+                },
+                "algebraic_type": {
+                  "I32": []
+                }
+              },
+              {
+                "name": {
+                  "some": "timezone"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "time_confidence"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "local_minute_of_day"
+                },
+                "algebraic_type": {
+                  "Sum": {
+                    "variants": [
+                      {
+                        "name": {
+                          "some": "some"
+                        },
+                        "algebraic_type": {
+                          "U16": []
+                        }
+                      },
+                      {
+                        "name": {
+                          "some": "none"
+                        },
+                        "algebraic_type": {
+                          "Product": {
+                            "elements": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": {
+                  "some": "uncertainty_minutes"
+                },
+                "algebraic_type": {
+                  "Sum": {
+                    "variants": [
+                      {
+                        "name": {
+                          "some": "some"
+                        },
+                        "algebraic_type": {
+                          "U16": []
+                        }
+                      },
+                      {
+                        "name": {
+                          "some": "none"
+                        },
+                        "algebraic_type": {
+                          "Product": {
+                            "elements": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": {
+                  "some": "fold"
+                },
+                "algebraic_type": {
+                  "Sum": {
+                    "variants": [
+                      {
+                        "name": {
+                          "some": "some"
+                        },
+                        "algebraic_type": {
+                          "U8": []
+                        }
+                      },
+                      {
+                        "name": {
+                          "some": "none"
+                        },
+                        "algebraic_type": {
+                          "Product": {
+                            "elements": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": {
+                  "some": "commit_token"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              }
+            ]
+          },
+          "visibility": {
+            "ClientCallable": []
+          },
+          "ok_return_type": {
+            "Product": {
+              "elements": []
+            }
+          },
+          "err_return_type": {
+            "String": []
+          }
+        },
+        {
+          "source_name": "save_birth_profile_with_house_method",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "local_date"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "place_label"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "latitude_e6"
+                },
+                "algebraic_type": {
+                  "I32": []
+                }
+              },
+              {
+                "name": {
+                  "some": "longitude_e6"
+                },
+                "algebraic_type": {
+                  "I32": []
+                }
+              },
+              {
+                "name": {
+                  "some": "timezone"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "time_confidence"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "local_minute_of_day"
+                },
+                "algebraic_type": {
+                  "Sum": {
+                    "variants": [
+                      {
+                        "name": {
+                          "some": "some"
+                        },
+                        "algebraic_type": {
+                          "U16": []
+                        }
+                      },
+                      {
+                        "name": {
+                          "some": "none"
+                        },
+                        "algebraic_type": {
+                          "Product": {
+                            "elements": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": {
+                  "some": "uncertainty_minutes"
+                },
+                "algebraic_type": {
+                  "Sum": {
+                    "variants": [
+                      {
+                        "name": {
+                          "some": "some"
+                        },
+                        "algebraic_type": {
+                          "U16": []
+                        }
+                      },
+                      {
+                        "name": {
+                          "some": "none"
+                        },
+                        "algebraic_type": {
+                          "Product": {
+                            "elements": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": {
+                  "some": "fold"
+                },
+                "algebraic_type": {
+                  "Sum": {
+                    "variants": [
+                      {
+                        "name": {
+                          "some": "some"
+                        },
+                        "algebraic_type": {
+                          "U8": []
+                        }
+                      },
+                      {
+                        "name": {
+                          "some": "none"
+                        },
+                        "algebraic_type": {
+                          "Product": {
+                            "elements": []
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": {
+                  "some": "house_method_id"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "commit_token"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              }
+            ]
+          },
+          "visibility": {
+            "ClientCallable": []
+          },
+          "ok_return_type": {
+            "Product": {
+              "elements": []
+            }
+          },
+          "err_return_type": {
+            "String": []
+          }
+        }
+      ]
+    },
+    {
+      "Procedures": [
+        {
+          "source_name": "get_daily_sky_result",
+          "params": {
+            "elements": []
+          },
+          "return_type": {
+            "Ref": 1
+          },
+          "visibility": {
+            "ClientCallable": []
+          }
+        },
+        {
+          "source_name": "get_natal_chart_result",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "commit_token"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              }
+            ]
+          },
+          "return_type": {
+            "Ref": 5
+          },
+          "visibility": {
+            "ClientCallable": []
+          }
+        },
+        {
+          "source_name": "get_natal_chart_result_with_house_method",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "commit_token"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "house_method_id"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              }
+            ]
+          },
+          "return_type": {
+            "Ref": 5
+          },
+          "visibility": {
+            "ClientCallable": []
+          }
+        },
+        {
+          "source_name": "get_next_planetary_station_result",
+          "params": {
+            "elements": [
+              {
+                "name": {
+                  "some": "body"
+                },
+                "algebraic_type": {
+                  "String": []
+                }
+              },
+              {
+                "name": {
+                  "some": "search_days"
+                },
+                "algebraic_type": {
+                  "U16": []
+                }
+              }
+            ]
+          },
+          "return_type": {
+            "Ref": 15
+          },
+          "visibility": {
+            "ClientCallable": []
+          }
+        }
+      ]
+    },
+    {
+      "Views": [
+        {
+          "source_name": "my_birth_profiles",
+          "index": 0,
+          "is_public": true,
+          "is_anonymous": false,
+          "params": {
+            "elements": []
+          },
+          "return_type": {
+            "Sum": {
+              "variants": [
+                {
+                  "name": {
+                    "some": "some"
+                  },
+                  "algebraic_type": {
+                    "Ref": 0
+                  }
+                },
+                {
+                  "name": {
+                    "some": "none"
+                  },
+                  "algebraic_type": {
+                    "Product": {
+                      "elements": []
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "source_name": "my_natal_charts",
+          "index": 1,
+          "is_public": true,
+          "is_anonymous": false,
+          "params": {
+            "elements": []
+          },
+          "return_type": {
+            "Sum": {
+              "variants": [
+                {
+                  "name": {
+                    "some": "some"
+                  },
+                  "algebraic_type": {
+                    "Ref": 16
+                  }
+                },
+                {
+                  "name": {
+                    "some": "none"
+                  },
+                  "algebraic_type": {
+                    "Product": {
+                      "elements": []
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ExplicitNames": {
+        "entries": [
+          {
+            "Table": {
+              "source_name": "birth_profile",
+              "canonical_name": "birth_profile"
+            }
+          },
+          {
+            "Table": {
+              "source_name": "natal_chart_result",
+              "canonical_name": "natal_chart_result"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "compute_natal_chart",
+              "canonical_name": "compute_natal_chart"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "delete_birth_profile",
+              "canonical_name": "delete_birth_profile"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "save_birth_profile",
+              "canonical_name": "save_birth_profile"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "save_birth_profile_with_house_method",
+              "canonical_name": "save_birth_profile_with_house_method"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "get_daily_sky_result",
+              "canonical_name": "get_daily_sky_result"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "get_natal_chart_result",
+              "canonical_name": "get_natal_chart_result"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "get_natal_chart_result_with_house_method",
+              "canonical_name": "get_natal_chart_result_with_house_method"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "get_next_planetary_station_result",
+              "canonical_name": "get_next_planetary_station_result"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "my_birth_profiles",
+              "canonical_name": "my_birth_profiles"
+            }
+          },
+          {
+            "Function": {
+              "source_name": "my_natal_charts",
+              "canonical_name": "my_natal_charts"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

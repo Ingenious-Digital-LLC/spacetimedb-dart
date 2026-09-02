@@ -88,13 +88,10 @@ void main() {
           reason: 'every parsed type should have a non-empty name');
     });
 
-    // This module currently declares no views, and no real SpacetimeDB
-    // 2.8+ "sections" describe output containing a view has been observed.
-    // This asserts the documented, currently-true behavior (no MiscExports
-    // or Views section present -> empty list, not an error). TODO: once
-    // Asteria's feat/module-client-views lands, capture a second fixture
-    // with a real view and replace/extend this with an assertion that it
-    // parses into a non-empty ViewSchema list.
+    // This module declares no views, and no "Views" section appears in its
+    // describe output at all — a real absence, not a parse failure.
+    // See the `asteria_module_views_describe.json` group below for real
+    // views coverage.
     test('views parse as empty when the module declares none', () {
       final schema = DatabaseSchema.fromJson('asteria-flutter-spike', json);
       expect(schema.views, isEmpty);
@@ -118,6 +115,56 @@ void main() {
           ]
         }),
         throwsFormatException,
+      );
+    });
+  });
+
+  group('DatabaseSchema.fromJson — SpacetimeDB 2.8+ Views section', () {
+    // asteria_module_views_describe.json is real describe output from a
+    // module that declares two public views. See its README: the "Views"
+    // section holds bare ViewSchema-shaped objects, NOT wrapped in
+    // `{"View": {...}}` the way legacy `misc_exports` wraps them. An
+    // earlier "best-effort" version of this parser assumed the wrapped
+    // shape by analogy and would have silently produced an empty views
+    // list against this exact fixture — these tests guard against that
+    // regressing.
+    late Map<String, dynamic> json;
+
+    setUpAll(() {
+      json = _loadFixture('asteria_module_views_describe.json');
+    });
+
+    test('parses both public views from the real Views section', () {
+      final schema = DatabaseSchema.fromJson('asteria-local', json);
+
+      expect(schema.views, hasLength(2));
+      expect(
+        schema.views.map((v) => v.name).toSet(),
+        equals({'my_birth_profiles', 'my_natal_charts'}),
+      );
+    });
+
+    test('views read `is_public` correctly', () {
+      final schema = DatabaseSchema.fromJson('asteria-local', json);
+      expect(schema.views.every((v) => v.isPublic), isTrue,
+          reason: 'both views in this fixture are declared public');
+    });
+
+    test('tables and reducers still parse alongside views', () {
+      final schema = DatabaseSchema.fromJson('asteria-local', json);
+
+      expect(
+        schema.tables.map((t) => t.name).toSet(),
+        equals({'birth_profile', 'natal_chart_result'}),
+      );
+      expect(
+        schema.reducers.map((r) => r.name).toSet(),
+        equals({
+          'compute_natal_chart',
+          'delete_birth_profile',
+          'save_birth_profile',
+          'save_birth_profile_with_house_method',
+        }),
       );
     });
   });

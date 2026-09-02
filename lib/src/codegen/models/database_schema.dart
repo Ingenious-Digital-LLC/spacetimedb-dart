@@ -31,8 +31,11 @@ class DatabaseSchema {
   ///   `types`, `typespace`, and `misc_exports` keys directly on the root.
   /// - SpacetimeDB 2.8+: `{"sections": [{"Typespace": ...}, {"Types": [...]},
   ///   {"Tables": [...]}, {"Reducers": [...]}, {"Procedures": [...]},
-  ///   {"ExplicitNames": {...}}, ...]}` — each section is a single-key
-  ///   object tagging its variant.
+  ///   {"Views": [...]}, {"ExplicitNames": {...}}, ...]}` — each section is
+  ///   a single-key object tagging its variant. Views (when the module
+  ///   declares any) are bare ViewSchema-shaped objects in the "Views"
+  ///   section, not wrapped in `{"View": {...}}` the way the legacy
+  ///   `misc_exports` array wraps them.
   ///
   /// Both are accepted. A shape that matches neither throws a
   /// [FormatException] naming what was found, rather than silently
@@ -90,13 +93,14 @@ class DatabaseSchema {
     List<dynamic>? typesJson;
     List<dynamic>? tablesJson;
     List<dynamic>? reducersJson;
-    // Views are not yet observed in a real SpacetimeDB 2.8+ "sections"
-    // describe output from any module we've generated against (our fixture
-    // module has none). We accept either a "MiscExports" section (matching
-    // the legacy `misc_exports` key, PascalCase per the section-tag
-    // convention) or a "Views" section, parsed the same way the legacy
-    // shape parses `misc_exports`. This is best-effort until a fixture with
-    // real views is available — see test/fixtures for the tracking note.
+    // Confirmed against a real SpacetimeDB 2.8+ module with views
+    // (test/fixtures/asteria_module_views_describe.json): a dedicated
+    // "Views" section holds ViewSchema-shaped objects directly — unlike
+    // the legacy `misc_exports` array, there is no `{"View": {...}}`
+    // wrapper here. "MiscExports" is still accepted defensively, using the
+    // legacy wrapped convention, in case some server version emits it
+    // instead; that path is otherwise unverified.
+    List<dynamic>? viewsJson;
     List<dynamic>? miscExportsJson;
     final foundTags = <String>[];
 
@@ -118,8 +122,10 @@ class DatabaseSchema {
         case 'Reducers':
           if (value is List) reducersJson = value;
           break;
-        case 'MiscExports':
         case 'Views':
+          if (value is List) viewsJson = value;
+          break;
+        case 'MiscExports':
           if (value is List) miscExportsJson = value;
           break;
         // 'Procedures' and 'ExplicitNames' sections exist in SpacetimeDB
@@ -139,6 +145,13 @@ class DatabaseSchema {
       );
     }
 
+    final views = viewsJson != null
+        ? viewsJson
+            .whereType<Map<String, dynamic>>()
+            .map((v) => ViewSchema.fromJson(v))
+            .toList()
+        : _viewsFromMiscExports(miscExportsJson);
+
     return DatabaseSchema(
       databaseName: dbName,
       typeSpace: TypeSpace.fromJson(typespaceJson ?? {}),
@@ -149,7 +162,7 @@ class DatabaseSchema {
           .map((r) => ReducerSchema.fromJson(r))
           .toList(),
       types: (typesJson ?? []).map((t) => TypeDef.fromJson(t)).toList(),
-      views: _viewsFromMiscExports(miscExportsJson),
+      views: views,
     );
   }
 

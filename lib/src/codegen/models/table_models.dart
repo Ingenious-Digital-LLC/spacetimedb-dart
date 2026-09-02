@@ -31,7 +31,9 @@ class TableSchema {
     final sequencesJson = json['sequences'];
 
     return TableSchema(
-      name: json['name'] ?? '',
+      // SpacetimeDB 2.8+ describe output names this field `source_name`;
+      // older output used `name`. Accept either.
+      name: json['source_name'] ?? json['name'] ?? '',
       productTypeRef: json['product_type_ref'] ?? 0,
       primaryKey: primaryKeyJson is List
           ? primaryKeyJson.whereType<int>().toList()
@@ -59,10 +61,17 @@ class IndexSchema {
   IndexSchema({this.name, this.accessorName, required this.algorithm});
 
   factory IndexSchema.fromJson(Map<String, dynamic> json) {
-    final nameJson = json['name'];
+    // SpacetimeDB 2.8+ describe output names this field `source_name`;
+    // older output used `name`. Both wrap the value as an Option
+    // (`{"some": "..."}` or absent/null for None) — guard against a
+    // missing/null wrapper rather than throwing.
+    final nameJson = json['source_name'] ?? json['name'];
     final accessorJson = json['accessor_name'];
-    final indexName = nameJson['some'] ?? "";
-    final accessor = accessorJson['some'] ?? "";
+    final indexName =
+        (nameJson is Map<String, dynamic> ? nameJson['some'] : null) ?? "";
+    final accessor =
+        (accessorJson is Map<String, dynamic> ? accessorJson['some'] : null) ??
+            "";
 
     return IndexSchema(
       name: indexName,
@@ -80,8 +89,12 @@ class ConstraintSchema {
   ConstraintSchema({this.name, required this.data});
 
   factory ConstraintSchema.fromJson(Map<String, dynamic> json) {
-    final nameJson = json['name'];
-    final constraintName = nameJson['some'] ?? "";
+    // SpacetimeDB 2.8+ describe output names this field `source_name`;
+    // older output used `name`. Accept either, guarding against a
+    // missing/null Option wrapper.
+    final nameJson = json['source_name'] ?? json['name'];
+    final constraintName =
+        (nameJson is Map<String, dynamic> ? nameJson['some'] : null) ?? "";
 
     return ConstraintSchema(
       name: constraintName,

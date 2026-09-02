@@ -20,7 +20,12 @@ class ViewSchema {
 
   factory ViewSchema.fromJson(Map<String, dynamic> json) {
     return ViewSchema(
-      name: json['name'] ?? '',
+      // Best-effort: no real SpacetimeDB 2.8+ "sections" describe output
+      // with a view has been observed yet (see
+      // test/fixtures/asteria_describe_2.8.3.json's tracking note), so this
+      // mirrors the source_name/name fallback used elsewhere pending a real
+      // fixture.
+      name: json['source_name'] ?? json['name'] ?? '',
       index: json['index'] ?? 0,
       isPublic: json['is_public'] ?? false,
       isAnonymous: json['is_anonymous'] ?? false,

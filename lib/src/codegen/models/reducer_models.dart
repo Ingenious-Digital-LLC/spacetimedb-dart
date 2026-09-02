@@ -16,7 +16,9 @@ class ReducerSchema {
 
   factory ReducerSchema.fromJson(Map<String, dynamic> json) {
     return ReducerSchema(
-      name: json['name'] ?? '',
+      // SpacetimeDB 2.8+ describe output names this field `source_name`;
+      // older output used `name`. Accept either.
+      name: json['source_name'] ?? json['name'] ?? '',
       params: ProductType.fromJson(json['params'] ?? {}),
       lifecycle: json['lifecycle'] ?? {},
     );

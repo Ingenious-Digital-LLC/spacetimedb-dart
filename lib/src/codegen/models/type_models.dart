@@ -60,8 +60,12 @@ class ProductElement {
   ProductElement({this.name, required this.algebraicType});
 
   factory ProductElement.fromJson(Map<String, dynamic> json) {
+    // `name` is an Option<String> (`{"some": "..."}` or absent/null for an
+    // unnamed/None field) in both the legacy and 2.8+ shapes. Guard against
+    // a missing/null wrapper rather than throwing.
     final nameObj = json['name'];
-    final fieldName = nameObj['some'] ?? "";
+    final fieldName =
+        (nameObj is Map<String, dynamic> ? nameObj['some'] : null) ?? "";
 
     return ProductElement(
       name: fieldName,
@@ -84,9 +88,13 @@ class TypeDef {
   });
 
   factory TypeDef.fromJson(Map<String, dynamic> json) {
-    final nameJson = json['name'];
-    final typeName = nameJson['name'] ?? "";
-    final scopeJson =  nameJson['scope'] ?? "";
+    // SpacetimeDB 2.8+ describe output wraps this under `source_name`
+    // (with the identifier itself also renamed to `source_name`); older
+    // output used `name`/`name`. Accept either.
+    final nameJson =
+        (json['source_name'] ?? json['name']) as Map<String, dynamic>? ?? {};
+    final typeName = nameJson['source_name'] ?? nameJson['name'] ?? "";
+    final scopeJson = nameJson['scope'] ?? "";
     final scopeList = scopeJson is List
         ? scopeJson.map((s) => s.toString()).toList()
         : <String>[];

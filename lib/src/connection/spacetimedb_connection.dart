@@ -116,6 +116,14 @@ class SpacetimeDbConnection {
 
   Stream<String> get onError => _errorController.stream;
 
+  /// How many times the websocket-token mint is attempted before the
+  /// connection gives up and reports [ConnectionStatus.authError].
+  static const tokenExchangeAttempts = 3;
+
+  final http.Client? _httpClient;
+  final bool _exchangeWebSocketToken;
+  final Duration _tokenExchangeRetryDelay;
+
   SpacetimeDbConnection({
     required this.host,
     required this.database,
@@ -123,8 +131,14 @@ class SpacetimeDbConnection {
     this.ssl = false,
     this.config = const ConnectionConfig(),
     WebSocketFactory? socketFactory,
+    http.Client? httpClient,
+    bool? exchangeWebSocketToken,
+    Duration tokenExchangeRetryDelay = const Duration(milliseconds: 500),
   })  : _currentToken = initialToken,
-        _socketFactory = socketFactory ?? ws.connectWebSocket {
+        _socketFactory = socketFactory ?? ws.connectWebSocket,
+        _httpClient = httpClient,
+        _exchangeWebSocketToken = exchangeWebSocketToken ?? kIsWeb,
+        _tokenExchangeRetryDelay = tokenExchangeRetryDelay {
     _shouldReconnect = config.autoReconnect;
     // Emit initial quality after allowing time for subscribers to attach
     // Use scheduleMicrotask to emit after constructor completes
@@ -151,32 +165,53 @@ class SpacetimeDbConnection {
   ///
   /// On web, we can't send custom headers with WebSocket connections,
   /// so we need to get a temporary token and pass it as a query parameter.
-  Future<String?> _getWebSocketToken() async {
-    if (_currentToken == null) return null;
-
-    try {
-      final httpProtocol = ssl ? 'https' : 'http';
-      final url =
-          Uri.parse('$httpProtocol://$host/v1/identity/websocket-token');
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $_currentToken',
-        },
-      ).timeout(config.connectTimeout);
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return data['token'] as String?;
-      } else {
-        SdkLogger.e('Failed to get WebSocket token: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      SdkLogger.e('Error getting WebSocket token: $e');
-      return null;
+  ///
+  /// Never returns null when a token is stored: the mint is retried
+  /// [tokenExchangeAttempts] times with exponential backoff and then a
+  /// [SpacetimeDbAuthException] is thrown. Falling back to an anonymous
+  /// connection here silently swapped the identity after a reconnect (the
+  /// UI still said connected, but every pending mutation and every owned
+  /// row belonged to the old identity).
+  Future<String> _getWebSocketToken() async {
+    final token = _currentToken;
+    if (token == null) {
+      throw StateError('No auth token to exchange for a WebSocket token');
     }
+    final httpProtocol = ssl ? 'https' : 'http';
+    final url = Uri.parse('$httpProtocol://$host/v1/identity/websocket-token');
+
+    String? lastFailure;
+    for (var attempt = 1; attempt <= tokenExchangeAttempts; attempt++) {
+      try {
+        final client = _httpClient;
+        final request = client == null
+            ? http.post(url, headers: {'Authorization': 'Bearer $token'})
+            : client.post(url, headers: {'Authorization': 'Bearer $token'});
+        final response = await request.timeout(config.connectTimeout);
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          final wsToken = data['token'];
+          if (wsToken is String && wsToken.isNotEmpty) return wsToken;
+          lastFailure = 'response had no token';
+        } else {
+          lastFailure = 'HTTP ${response.statusCode}';
+        }
+      } catch (e) {
+        lastFailure = e.toString();
+      }
+      SdkLogger.e(
+          'WebSocket token mint failed (attempt $attempt/$tokenExchangeAttempts): $lastFailure');
+      if (attempt < tokenExchangeAttempts) {
+        await Future<void>.delayed(
+            _tokenExchangeRetryDelay * math.pow(2, attempt - 1).toInt());
+      }
+    }
+    throw SpacetimeDbAuthException(
+      'Could not mint a WebSocket token for the stored identity after '
+      '$tokenExchangeAttempts attempts ($lastFailure). Refusing to connect '
+      'anonymously; the stored token and queued mutations are untouched.',
+    );
   }
 
   Future<void> connect() async {
@@ -195,12 +230,11 @@ class SpacetimeDbConnection {
       final headers = <String, dynamic>{};
 
       // On web, we need to use query parameter for auth since WebSocket API
-      // doesn't support custom headers. Get a temporary token first.
-      if (kIsWeb && _currentToken != null) {
+      // doesn't support custom headers. Get a temporary token first. An
+      // anonymous connection is only ever opened when no token is stored.
+      if (_exchangeWebSocketToken && _currentToken != null) {
         final wsToken = await _getWebSocketToken();
-        if (wsToken != null) {
-          uri = uri.replace(queryParameters: {'token': wsToken});
-        }
+        uri = uri.replace(queryParameters: {'token': wsToken});
       } else if (_currentToken != null) {
         // On native platforms, use Authorization header
         headers['Authorization'] = 'Bearer $_currentToken';
@@ -224,17 +258,22 @@ class SpacetimeDbConnection {
 
       // FIX: Update BOTH State and Status to prevent desynchronization
       _updateState(ConnectionState.disconnected);
-      _updateStatus(ConnectionStatus.disconnected);
-
       _channel = null;
+
+      if (e is SpacetimeDbAuthException) {
+        _updateStatus(ConnectionStatus.authError);
+        rethrow;
+      }
 
       final errorString = e.toString();
       if (errorString.contains('401') || errorString.contains('Unauthorized')) {
+        _updateStatus(ConnectionStatus.authError);
         throw SpacetimeDbAuthException(
           'Authentication failed (401). Token may be invalid or expired.',
         );
       }
 
+      _updateStatus(ConnectionStatus.disconnected);
       rethrow;
     }
   }

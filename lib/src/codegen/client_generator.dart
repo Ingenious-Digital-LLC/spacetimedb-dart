@@ -170,8 +170,8 @@ class ClientGenerator {
     buf.writeln('  $clientName._({');
     buf.writeln('    required this.connection,');
     buf.writeln('    required this.subscriptions,');
-    buf.writeln('    required AuthTokenStore this._authStorage,');
-    buf.writeln('    required bool this._ssl,');
+    buf.writeln('    required this._authStorage,');
+    buf.writeln('    required this._ssl,');
     buf.writeln('  }) {');
     buf.writeln(
         '    // Initialize Reducers with ReducerCaller and ReducerEmitter');
@@ -246,8 +246,8 @@ class ClientGenerator {
     buf.writeln('    final client = $clientName._(');
     buf.writeln('      connection: connection,');
     buf.writeln('      subscriptions: subscriptionManager,');
-    buf.writeln('      _authStorage: storage,');
-    buf.writeln('      _ssl: ssl,');
+    buf.writeln('      authStorage: storage,');
+    buf.writeln('      ssl: ssl,');
     buf.writeln('    );');
     buf.writeln();
     buf.writeln('    // Auto-save new tokens');

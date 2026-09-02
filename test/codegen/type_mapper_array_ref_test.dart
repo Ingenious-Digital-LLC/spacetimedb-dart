@@ -22,20 +22,44 @@
 //
 // See test/fixtures/asteria_module_views_describe.README.md for the real
 // module this was found against.
+//
+// 3. A third bug in the same family surfaced once (1) and (2) were fixed:
+//    a field typed `Option<SomeMultiFieldStruct>` (a 2-variant Sum whose
+//    Some payload is `{"Ref": N}` to an ordinary multi-field struct, e.g.
+//    Asteria's `DailySkyWireEnvelope.next_lunar_transition:
+//    Option<LunarTransitionWire>`) crashed the same way, even though
+//    bare `Ref` fields and `Array<Ref<T>>` fields both worked. The cause
+//    was in getOptionInnerType, not in the encode/decode expression
+//    builders: it resolved the Some variant's Ref down to its bare
+//    structural Product shape before returning it, so by the time
+//    getEncodeExpression saw it, the `{"Ref": N}` was already gone and it
+//    fell through to the primitive-only getEncoderMethod, throwing.
+//    Fixed by having getOptionInnerType return the *unresolved* Ref for
+//    this case, so Ref detection downstream still works.
 import 'package:test/test.dart';
 import 'package:spacetimedb/src/codegen/models/type_models.dart';
 import 'package:spacetimedb/src/codegen/type_mapper.dart';
 
 void main() {
   // A minimal typespace: index 0 is a Product (struct) type, index 1 is a
-  // Sum (enum) type — enough to distinguish the two generator conventions.
+  // Sum (enum) type, index 2 is a multi-field Product (struct) type with
+  // more than one field and no single-field-wrapper/identity shape —
+  // enough to distinguish the two generator conventions and to exercise
+  // getOptionInnerType's Ref-to-ordinary-multi-field-struct fallback.
   final typeSpace = TypeSpace(types: [
     AlgebraicType(product: ProductType(elements: [])), // 0: struct
     AlgebraicType(sum: SumType(variants: [])), // 1: enum
+    AlgebraicType(
+      product: ProductType(elements: [
+        ProductElement(name: 'kind', algebraicType: {'String': []}),
+        ProductElement(name: 'not_before', algebraicType: {'String': []}),
+      ]),
+    ), // 2: multi-field struct (mirrors LunarTransitionWire's shape)
   ]);
   final typeDefs = [
     TypeDef(scope: [], name: 'PlanetaryPositionWire', typeRef: 0, customOrdering: false),
     TypeDef(scope: [], name: 'SomeEnum', typeRef: 1, customOrdering: false),
+    TypeDef(scope: [], name: 'LunarTransitionWire', typeRef: 2, customOrdering: false),
   ];
 
   group('TypeMapper.getEncodeExpression / getDecodeExpression', () {
@@ -149,6 +173,67 @@ void main() {
         ),
         'decoder.readArray<PlanetaryPositionWire>(() => PlanetaryPositionWire.decodeBsatn(decoder))',
       );
+    });
+  });
+
+  group('TypeMapper.getOptionInnerType — Ref to an ordinary struct', () {
+    // The raw JSON shape of `Option<LunarTransitionWire>`: a 2-variant Sum
+    // where one variant is unit-like (None) and the other's algebraic_type
+    // is a bare Ref (Some), exactly as `spacetime describe --json` emits
+    // it for a Rust `Option<SomeStruct>` field.
+    final optionOfRefStruct = {
+      'Sum': {
+        'variants': [
+          {
+            'name': {'some': 'none'},
+            'algebraic_type': <String, dynamic>{},
+          },
+          {
+            'name': {'some': 'some'},
+            'algebraic_type': {'Ref': 2},
+          },
+        ],
+      },
+    };
+
+    test('returns the unresolved Ref, not its resolved structural shape',
+        () {
+      final inner = TypeMapper.getOptionInnerType(
+        optionOfRefStruct,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+
+      expect(inner, {'Ref': 2},
+          reason: 'resolving the Ref here strips the information '
+              'getEncodeExpression/getDecodeExpression need to pick '
+              'encodeBsatn/decodeBsatn over the primitive-only fallback');
+    });
+
+    test(
+        'end-to-end: an Option<Ref<struct>> field encodes/decodes via '
+        'writeOption/readOption calling encodeBsatn/decodeBsatn, not a '
+        'crash on the bare resolved Product', () {
+      final inner = TypeMapper.getOptionInnerType(
+        optionOfRefStruct,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      )!;
+
+      final encodeExpr = TypeMapper.getEncodeExpression(
+        'v',
+        inner,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+      final decodeExpr = TypeMapper.getDecodeExpression(
+        inner,
+        typeSpace: typeSpace,
+        typeDefs: typeDefs,
+      );
+
+      expect(encodeExpr, 'v.encodeBsatn(encoder)');
+      expect(decodeExpr, 'LunarTransitionWire.decodeBsatn(decoder)');
     });
   });
 }

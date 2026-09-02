@@ -371,25 +371,36 @@ class TypeMapper {
       return null;
     }
 
-    final firstType = _resolveAlgebraicType(
-      (firstVariant['algebraic_type'] as Map?)?.cast<String, dynamic>() ??
-          <String, dynamic>{},
-      typeSpace,
-    );
-    final secondType = _resolveAlgebraicType(
-      (secondVariant['algebraic_type'] as Map?)?.cast<String, dynamic>() ??
-          <String, dynamic>{},
-      typeSpace,
-    );
+    final firstTypeRaw =
+        (firstVariant['algebraic_type'] as Map?)?.cast<String, dynamic>() ??
+            <String, dynamic>{};
+    final secondTypeRaw =
+        (secondVariant['algebraic_type'] as Map?)?.cast<String, dynamic>() ??
+            <String, dynamic>{};
+    final firstType = _resolveAlgebraicType(firstTypeRaw, typeSpace);
+    final secondType = _resolveAlgebraicType(secondTypeRaw, typeSpace);
 
     Map<String, dynamic> noneType;
     Map<String, dynamic> someType;
+    // someTypeRaw is the Some variant's algebraic_type as written, before
+    // Ref resolution. Most of the logic below needs the resolved
+    // (structural) shape to detect identity/unit/single-field-wrapper
+    // patterns, but the final fallback (a Ref to an ordinary multi-field
+    // struct, e.g. Option<SomeStruct>) must return the *unresolved* Ref
+    // so callers like getEncodeExpression/getDecodeExpression can still
+    // see it's a Ref and pick the right encodeBsatn/decodeBsatn or
+    // encode/decode call — resolving it here would silently strip that
+    // and hand back a bare structural Product no generator method knows
+    // how to encode.
+    Map<String, dynamic> someTypeRaw;
     if (_isUnitLike(firstType) && !_isUnitLike(secondType)) {
       noneType = firstType;
       someType = secondType;
+      someTypeRaw = secondTypeRaw;
     } else if (_isUnitLike(secondType) && !_isUnitLike(firstType)) {
       noneType = secondType;
       someType = firstType;
+      someTypeRaw = firstTypeRaw;
     } else {
       return null;
     }
@@ -420,6 +431,13 @@ class TypeMapper {
 
     if (_isUnitLike(someType)) {
       return null;
+    }
+
+    // If the Some variant is a Ref (to a struct, enum, or anything else),
+    // return the unresolved Ref itself rather than its resolved structural
+    // shape — see the comment above someTypeRaw's declaration.
+    if (someTypeRaw.containsKey('Ref')) {
+      return someTypeRaw;
     }
 
     return someType;

@@ -373,7 +373,7 @@ class TableGenerator {
       typeSpace: schema.typeSpace,
       typeDefs: schema.types,
     )) {
-      return '    encoder.writeBytes(($fieldName as Identity).bytes);';
+      return '    encoder.writeBytes($fieldName.bytes);';
     }
 
     final optionInnerType = TypeMapper.getOptionInnerType(
@@ -388,7 +388,7 @@ class TableGenerator {
         typeDefs: schema.types,
       );
       final innerWrite = _getInlineWriteStatement('v', optionInnerType);
-      return '    encoder.writeOption<$innerDartType>($fieldName as $innerDartType?, (v) => $innerWrite);';
+      return '    encoder.writeOption<$innerDartType>($fieldName, (v) => $innerWrite);';
     }
 
     if (TypeMapper.isScheduleAtType(
@@ -459,7 +459,7 @@ class TableGenerator {
       typeSpace: schema.typeSpace,
       typeDefs: schema.types,
     )) {
-      return 'encoder.writeBytes(($valueName as Identity).bytes)';
+      return 'encoder.writeBytes($valueName.bytes)';
     }
 
     if (TypeMapper.isRefType(algebraicType)) {

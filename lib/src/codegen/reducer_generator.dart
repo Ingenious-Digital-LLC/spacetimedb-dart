@@ -75,7 +75,7 @@ class ReducerGenerator {
     // Class definition
     buf.writeln('/// Generated reducer methods with async/await support');
     buf.writeln('///');
-    buf.writeln('/// All methods return Future<TransactionResult> containing:');
+    buf.writeln('/// All methods return `Future<TransactionResult>` containing:');
     buf.writeln('/// - status: Committed/Failed/OutOfEnergy');
     buf.writeln('/// - timestamp: When the reducer executed');
     buf.writeln(
@@ -382,7 +382,7 @@ class ReducerGenerator {
       typeSpace: typeSpace,
       typeDefs: typeDefs,
     )) {
-      return '    encoder.writeBytes(($valueName as Identity).bytes);';
+      return '    encoder.writeBytes($valueName.bytes);';
     }
 
     final optionInnerType = TypeMapper.getOptionInnerType(
@@ -397,7 +397,7 @@ class ReducerGenerator {
         typeDefs: typeDefs,
       );
       final innerWrite = _getInlineWriteStatement('v', optionInnerType);
-      return '    encoder.writeOption<$innerDartType>($valueName as $innerDartType?, (v) => $innerWrite);';
+      return '    encoder.writeOption<$innerDartType>($valueName, (v) => $innerWrite);';
     }
 
     if (TypeMapper.isScheduleAtType(algebraicType, typeSpace: typeSpace)) {
@@ -466,7 +466,7 @@ class ReducerGenerator {
       typeSpace: typeSpace,
       typeDefs: typeDefs,
     )) {
-      return 'encoder.writeBytes(($valueName as Identity).bytes)';
+      return 'encoder.writeBytes($valueName.bytes)';
     }
 
     if (TypeMapper.isRefType(algebraicType)) {

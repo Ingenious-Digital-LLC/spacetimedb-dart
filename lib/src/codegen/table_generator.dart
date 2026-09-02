@@ -28,23 +28,16 @@ class TableGenerator {
       ),
     );
 
-    // Collect imports for Ref types
+    // Collect imports for Ref types, including one wrapped in Option<...>
+    // or Array<...> (or both) rather than only a field whose whole type is
+    // a bare Ref. A field like `Vec<SomeStruct>` or `Option<SomeStruct>`
+    // needs the same import as a bare `SomeStruct` field — without this,
+    // the referenced class's name resolves to nothing and every use of it
+    // fails `flutter analyze`/`flutter test` with "isn't a type".
     final imports = <String>{};
     for (final element in productType.elements) {
-      if (TypeMapper.isRefType(element.algebraicType) &&
-          !TypeMapper.isIdentityType(
-            element.algebraicType,
-            typeSpace: schema.typeSpace,
-            typeDefs: schema.types,
-          )) {
-        final refTypeName = TypeMapper.getRefTypeName(
-          element.algebraicType,
-          schema.types,
-        );
-        if (refTypeName != null) {
-          final fileName = _toSnakeCase(refTypeName);
-          imports.add("import '$fileName.dart';");
-        }
+      for (final refTypeName in _collectRefTypeNames(element.algebraicType)) {
+        imports.add("import '${_toSnakeCase(refTypeName)}.dart';");
       }
     }
 
@@ -506,6 +499,50 @@ class TableGenerator {
         algebraicType.containsKey('I8') ||
         algebraicType.containsKey('I16') ||
         algebraicType.containsKey('I32');
+  }
+
+  /// Every named type a Ref (bare, inside Array<...>, inside Option<...>,
+  /// or nested combinations of those) reaches from [algebraicType],
+  /// excluding Identity (which isn't a generated file — it's the SDK's
+  /// built-in Identity class). Used to decide which sibling files this
+  /// generated file needs to import.
+  Set<String> _collectRefTypeNames(Map<String, dynamic> algebraicType) {
+    final names = <String>{};
+
+    if (TypeMapper.isRefType(algebraicType)) {
+      if (!TypeMapper.isIdentityType(
+        algebraicType,
+        typeSpace: schema.typeSpace,
+        typeDefs: schema.types,
+      )) {
+        final refTypeName = TypeMapper.getRefTypeName(
+          algebraicType,
+          schema.types,
+        );
+        if (refTypeName != null) {
+          names.add(refTypeName);
+        }
+      }
+      return names;
+    }
+
+    if (algebraicType.containsKey('Array')) {
+      final elementType =
+          (algebraicType['Array'] as Map).cast<String, dynamic>();
+      names.addAll(_collectRefTypeNames(elementType));
+      return names;
+    }
+
+    final optionInnerType = TypeMapper.getOptionInnerType(
+      algebraicType,
+      typeSpace: schema.typeSpace,
+      typeDefs: schema.types,
+    );
+    if (optionInnerType != null) {
+      names.addAll(_collectRefTypeNames(optionInnerType));
+    }
+
+    return names;
   }
 
   String _toPascalCase(String input) {

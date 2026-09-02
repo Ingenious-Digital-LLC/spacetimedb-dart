@@ -36,8 +36,34 @@
 //    fell through to the primitive-only getEncoderMethod, throwing.
 //    Fixed by having getOptionInnerType return the *unresolved* Ref for
 //    this case, so Ref detection downstream still works.
+//
+// 4. A fourth, unrelated bug surfaced once real Array<Ref<T>> fields
+//    started generating: `Array<U8>` (a byte array) was special-cased to
+//    `encoder.writeBytes(value)` / `decoder.readBytes()`, but
+//    BsatnDecoder.readBytes requires an explicit length argument that
+//    nothing on this path reads off the wire first — a real mismatch
+//    that would compile but decode wrong (or throw a wrong-arity error,
+//    which is how it was actually caught: "1 positional argument
+//    expected by 'readBytes', but 0 found"). Fixed by removing the
+//    special case entirely; U8 now goes through the same generic
+//    per-element writeArray/readArray loop as any other array element
+//    type, matching the `List<int>` type toDartType already declares
+//    for this shape (toDartType was intentionally left alone rather than
+//    also special-cased to Uint8List, to avoid re-diverging the two).
+//
+// A fifth bug, also found in this pass: TableGenerator's import
+// collection only recognized a field whose *entire* type was a bare Ref;
+// a Ref reached only via Array<...> or Option<...> (or nested
+// combinations) was never imported, so the field's own type compiled
+// (per bug 1's fix) but every *use* of the referenced class failed
+// "isn't a type" / cascading nullability errors. Fixed by making import
+// collection recurse into Array and Option wrappers instead of only
+// checking the field's top-level shape.
 import 'package:test/test.dart';
 import 'package:spacetimedb/src/codegen/models/type_models.dart';
+import 'package:spacetimedb/src/codegen/models/table_models.dart';
+import 'package:spacetimedb/src/codegen/models/database_schema.dart';
+import 'package:spacetimedb/src/codegen/table_generator.dart';
 import 'package:spacetimedb/src/codegen/type_mapper.dart';
 
 void main() {
@@ -74,18 +100,23 @@ void main() {
       );
     });
 
-    test('Array<U8> uses raw bytes, not a callback loop', () {
+    test(
+        'Array<U8> uses the generic per-element writeArray/readArray loop, '
+        'not encoder.writeBytes()/decoder.readBytes() — writeBytes takes no '
+        'length but BsatnDecoder.readBytes requires one nothing here reads '
+        'off the wire, so a bare writeBytes/readBytes pair would compile '
+        'but decode wrong', () {
       expect(
         TypeMapper.getEncodeExpression('value', {
           'Array': {'U8': []}
         }),
-        'encoder.writeBytes(value)',
+        'encoder.writeArray<int>(value, (item) => encoder.writeU8(item))',
       );
       expect(
         TypeMapper.getDecodeExpression({
           'Array': {'U8': []}
         }),
-        'decoder.readBytes()',
+        'decoder.readArray<int>(() => decoder.readU8())',
       );
     });
 
@@ -234,6 +265,83 @@ void main() {
 
       expect(encodeExpr, 'v.encodeBsatn(encoder)');
       expect(decodeExpr, 'LunarTransitionWire.decodeBsatn(decoder)');
+    });
+  });
+
+  group('TableGenerator — imports for Ref reached via Array/Option', () {
+    test(
+        'a table with an Array<Ref<T>> field and an Option<Ref<T>> field '
+        'imports both referenced types, not just a bare-Ref field', () {
+      // typespace: 0 = the table row itself, 1 = LunarTransitionWire
+      // (multi-field struct, reused from the group above), 2 = another
+      // multi-field struct used only via Array<Ref<2>>.
+      final rowType = AlgebraicType(
+        product: ProductType(elements: [
+          ProductElement(
+            name: 'transitions',
+            algebraicType: {
+              'Array': {'Ref': 2}
+            },
+          ),
+          ProductElement(
+            name: 'next_transition',
+            algebraicType: {
+              'Sum': {
+                'variants': [
+                  {'name': null, 'algebraic_type': <String, dynamic>{}},
+                  {
+                    'name': {'some': 'some'},
+                    'algebraic_type': {'Ref': 1},
+                  },
+                ],
+              },
+            },
+          ),
+        ]),
+      );
+
+      final rowTypeSpace = TypeSpace(types: [
+        rowType,
+        typeSpace.types[2], // LunarTransitionWire, from the group above
+        AlgebraicType(
+          product: ProductType(elements: [
+            ProductElement(name: 'foo', algebraicType: {'String': []}),
+            ProductElement(name: 'bar', algebraicType: {'String': []}),
+          ]),
+        ),
+      ]);
+      final rowTypeDefs = [
+        TypeDef(scope: [], name: 'SomeRow', typeRef: 0, customOrdering: false),
+        TypeDef(scope: [], name: 'LunarTransitionWire', typeRef: 1, customOrdering: false),
+        TypeDef(scope: [], name: 'OtherWire', typeRef: 2, customOrdering: false),
+      ];
+
+      final schema = DatabaseSchema(
+        databaseName: 'test-db',
+        typeSpace: rowTypeSpace,
+        tables: const [],
+        reducers: const [],
+        types: rowTypeDefs,
+        views: const [],
+      );
+      final table = TableSchema(
+        name: 'some_row',
+        productTypeRef: 0,
+        primaryKey: const [],
+        indexes: const [],
+        constraints: const [],
+        sequences: const [],
+        schedule: const {},
+        tableType: const {},
+        tableAccess: const {},
+      );
+
+      final generated = TableGenerator(schema, table).generate();
+
+      expect(generated, contains("import 'other_wire.dart';"),
+          reason: 'Array<Ref<OtherWire>> field must import OtherWire');
+      expect(generated, contains("import 'lunar_transition_wire.dart';"),
+          reason: 'Option<Ref<LunarTransitionWire>> field must import it');
     });
   });
 }

@@ -205,12 +205,22 @@ class TypeMapper {
     TypeSpace? typeSpace,
     List<TypeDef>? typeDefs,
   }) {
+    if (isIdentityType(algebraicType, typeSpace: typeSpace, typeDefs: typeDefs)) {
+      return 'encoder.writeBytes($valueName.bytes)';
+    }
+
     if (algebraicType.containsKey('Array')) {
       final elementType =
           (algebraicType['Array'] as Map).cast<String, dynamic>();
-      if (elementType.containsKey('U8')) {
-        return 'encoder.writeBytes($valueName)';
-      }
+      // Note: U8 arrays deliberately go through the generic per-element
+      // writeArray loop below, not encoder.writeBytes(). writeBytes takes
+      // no length argument on the encode side but BsatnDecoder.readBytes
+      // requires an explicit length, which nothing here has read off the
+      // wire — a mismatched pair would compile but decode wrong. The
+      // per-element loop is self-delimiting (each array is length-prefixed
+      // by writeArray/readArray) and matches toDartType's declared
+      // `List<int>` for this shape, at the cost of one length byte per
+      // element instead of a single bulk length prefix.
       final innerDartType = toDartType(
         elementType,
         typeSpace: typeSpace,
@@ -243,12 +253,16 @@ class TypeMapper {
     TypeSpace? typeSpace,
     List<TypeDef>? typeDefs,
   }) {
+    if (isIdentityType(algebraicType, typeSpace: typeSpace, typeDefs: typeDefs)) {
+      return 'Identity(decoder.readBytes(32))';
+    }
+
     if (algebraicType.containsKey('Array')) {
       final elementType =
           (algebraicType['Array'] as Map).cast<String, dynamic>();
-      if (elementType.containsKey('U8')) {
-        return 'decoder.readBytes()';
-      }
+      // See the matching note in getEncodeExpression: U8 arrays use the
+      // generic per-element readArray loop, not decoder.readBytes(), which
+      // requires a length nothing here has read off the wire.
       final innerDartType = toDartType(
         elementType,
         typeSpace: typeSpace,

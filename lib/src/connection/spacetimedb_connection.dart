@@ -149,6 +149,23 @@ class SpacetimeDbConnection {
 
   bool get isConnected => _state == ConnectionState.connected;
 
+  /// Upper bound for one `connect()` including the websocket-token mint
+  /// retries: each of the [tokenExchangeAttempts] mints may take
+  /// [ConnectionConfig.connectTimeout], the backoff between them is
+  /// `_tokenExchangeRetryDelay * (2^(attempts-1) - 1)` in total, and the
+  /// socket open itself takes one more `connectTimeout`. Generated clients
+  /// wrap `connect()` in this rather than a bare `connectTimeout`, which fired
+  /// before a slow mint could report [ConnectionStatus.authError].
+  Duration get connectBudget {
+    final mintAttempts = _exchangeWebSocketToken ? tokenExchangeAttempts : 0;
+    final backoffMs = mintAttempts > 1
+        ? _tokenExchangeRetryDelay.inMilliseconds * ((1 << (mintAttempts - 1)) - 1)
+        : 0;
+    return config.connectTimeout * (mintAttempts + 1) +
+        Duration(milliseconds: backoffMs) +
+        const Duration(seconds: 1);
+  }
+
   /// The compression this connection asks the server for: the explicit
   /// [ConnectionConfig.compression] if set, otherwise none on web (the
   /// pure-Dart brotli decoder fails on larger frames under dart2js and there

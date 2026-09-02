@@ -60,6 +60,32 @@ SpacetimeDbConnection _connection({
 }
 
 void main() {
+  group('connectBudget', () {
+    test('covers every mint attempt, the backoff and the socket open', () {
+      const connectTimeout = Duration(seconds: 10);
+      final web = SpacetimeDbConnection(
+        host: '127.0.0.1:1',
+        database: 'budget',
+        initialToken: 't',
+        config: const ConnectionConfig(connectTimeout: connectTimeout),
+        exchangeWebSocketToken: true,
+        tokenExchangeRetryDelay: const Duration(milliseconds: 500),
+      );
+      // 3 mints + 1 socket open = 40 s, backoff 500 ms + 1000 ms, 1 s slack.
+      expect(web.connectBudget, const Duration(seconds: 42, milliseconds: 500));
+      expect(web.connectBudget, greaterThan(connectTimeout));
+
+      final native = SpacetimeDbConnection(
+        host: '127.0.0.1:1',
+        database: 'budget',
+        initialToken: 't',
+        config: const ConnectionConfig(connectTimeout: connectTimeout),
+        exchangeWebSocketToken: false,
+      );
+      expect(native.connectBudget, const Duration(seconds: 11));
+    });
+  });
+
   group('websocket-token exchange', () {
     test('a persistent 401 never connects anonymously and reports authError',
         () async {

@@ -270,7 +270,7 @@ class ClientGenerator {
         '    // Connect and subscribe - with offline support, this is non-blocking on failure');
     buf.writeln('    try {');
     buf.writeln(
-        '      await connection.connect().timeout(config.connectTimeout);');
+        '      await connection.connect().timeout(connection.connectBudget);');
     buf.writeln(
         '      if (initialSubscriptions != null && initialSubscriptions.isNotEmpty) {');
     buf.writeln(

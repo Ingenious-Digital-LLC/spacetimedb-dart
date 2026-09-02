@@ -30,6 +30,30 @@ SpacetimeDbConnection _connection({
 }
 
 void main() {
+  group('platform default', () {
+    test('web resolves to None unless configured', () {
+      expect(
+        SpacetimeDbConnection.resolveCompression(null, isWeb: true),
+        MessageCompression.none,
+      );
+      expect(
+        SpacetimeDbConnection.resolveCompression(null, isWeb: false),
+        MessageCompression.serverDefault,
+      );
+      for (final choice in MessageCompression.values) {
+        expect(SpacetimeDbConnection.resolveCompression(choice, isWeb: true), choice);
+        expect(SpacetimeDbConnection.resolveCompression(choice, isWeb: false), choice);
+      }
+    });
+
+    test('the web default is the wire value the server accepts', () {
+      expect(
+        SpacetimeDbConnection.resolveCompression(null, isWeb: true).wireValue,
+        'None',
+      );
+    });
+  });
+
   group('compression query parameter', () {
     test('server default sends no parameter', () async {
       final attempts = <Uri>[];

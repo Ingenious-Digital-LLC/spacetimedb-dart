@@ -154,8 +154,18 @@ class SpacetimeDbConnection {
   /// pure-Dart brotli decoder fails on larger frames under dart2js and there
   /// is no web gzip decoder) and the server default elsewhere.
   MessageCompression get effectiveCompression =>
-      config.compression ??
-      (kIsWeb ? MessageCompression.none : MessageCompression.serverDefault);
+      resolveCompression(config.compression, isWeb: kIsWeb);
+
+  /// Platform default resolution for [ConnectionConfig.compression], kept
+  /// separate from [kIsWeb] so the web default is unit-testable on the VM:
+  /// a regenerate or refactor must not silently re-enable brotli on web.
+  static MessageCompression resolveCompression(
+    MessageCompression? configured, {
+    required bool isWeb,
+  }) {
+    if (configured != null) return configured;
+    return isWeb ? MessageCompression.none : MessageCompression.serverDefault;
+  }
 
   /// The current authentication token, if any
   String? get token => _currentToken;

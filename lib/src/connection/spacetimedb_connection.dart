@@ -169,6 +169,52 @@ class SpacetimeDbConnection {
     SdkLogger.i('Authentication token updated');
   }
 
+  /// Whether an IdentityToken message's token should replace the stored one.
+  ///
+  /// A socket that authenticated with an exchanged websocket token (the web
+  /// path) is echoed a token with that exchange's short `exp` (60 s on
+  /// SpacetimeDB 2.8), not the long-lived identity token. Persisting it
+  /// overwrote the long-lived token, so every reconnect or reload after a
+  /// minute minted with an expired bearer and got 401. Keep the token we
+  /// hold whenever the echoed one expires sooner; adopt in every other case
+  /// (no stored token, no `exp` on the echo, undecodable tokens).
+  bool shouldAdoptIdentityToken(String echoedToken) {
+    final current = _currentToken;
+    if (current == null || current == echoedToken) return current == null;
+    final echoedExp = jwtExpiry(echoedToken);
+    if (echoedExp == null) return true;
+    final currentClaims = jwtClaims(current);
+    if (currentClaims == null) return true; // not a JWT we can reason about
+    final currentExp = currentClaims['exp'];
+    if (currentExp is! num) {
+      SdkLogger.i(
+          'Keeping long-lived identity token; echoed token expires at $echoedExp');
+      return false;
+    }
+    return echoedExp >= currentExp.toInt();
+  }
+
+  /// The `exp` claim (seconds since epoch) of an unverified JWT, or null when
+  /// absent or the token is not a decodable JWT.
+  static int? jwtExpiry(String token) {
+    final exp = jwtClaims(token)?['exp'];
+    return exp is num ? exp.toInt() : null;
+  }
+
+  /// The unverified payload claims of a JWT, or null when [token] is not a
+  /// three-part token whose payload decodes to a JSON object.
+  static Map<String, dynamic>? jwtClaims(String token) {
+    final parts = token.split('.');
+    if (parts.length != 3) return null;
+    try {
+      final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final claims = jsonDecode(payload);
+      return claims is Map<String, dynamic> ? claims : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Exchange auth token for a short-lived WebSocket token (for web platform)
   ///
   /// On web, we can't send custom headers with WebSocket connections,

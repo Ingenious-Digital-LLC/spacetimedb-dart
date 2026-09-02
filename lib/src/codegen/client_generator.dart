@@ -250,9 +250,11 @@ class ClientGenerator {
     buf.writeln('      ssl: ssl,');
     buf.writeln('    );');
     buf.writeln();
-    buf.writeln('    // Auto-save new tokens');
+    buf.writeln('    // Auto-save new tokens, unless the echo is a shorter-lived token than');
+    buf.writeln('    // the one we hold (the web websocket-token exchange echoes a 60 s token).');
     buf.writeln(
         '    client._identityTokenSub = subscriptionManager.onIdentityToken.listen((msg) async {');
+    buf.writeln('      if (!connection.shouldAdoptIdentityToken(msg.token)) return;');
     buf.writeln('      await storage.saveToken(msg.token);');
     buf.writeln('      connection.updateToken(msg.token);');
     buf.writeln('    });');

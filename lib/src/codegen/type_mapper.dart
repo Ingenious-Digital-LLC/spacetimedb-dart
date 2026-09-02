@@ -219,8 +219,12 @@ class TypeMapper {
       // wire — a mismatched pair would compile but decode wrong. The
       // per-element loop is self-delimiting (each array is length-prefixed
       // by writeArray/readArray) and matches toDartType's declared
-      // `List<int>` for this shape, at the cost of one length byte per
-      // element instead of a single bulk length prefix.
+      // `List<int>` for this shape. It's also byte-identical on the wire
+      // to a direct writeBytes/readBytes pair: writeArray writes a u32
+      // length then calls writeU8 per element (one byte, no per-element
+      // framing), which is exactly `u32 length + raw bytes` — the same
+      // layout BSATN's writeBytes/readBytes would produce. No overhead,
+      // no wire-format change.
       final innerDartType = toDartType(
         elementType,
         typeSpace: typeSpace,

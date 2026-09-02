@@ -254,6 +254,15 @@ class TableGenerator {
         return '$fieldName?.toInt()';
       }
 
+      // Same public-field-promotion limitation as above: a `$fieldName ==
+      // null ? null : $fieldName.toJson()` ternary doesn't let the analyzer
+      // treat $fieldName as non-null in the else branch for a public field,
+      // so it (correctly) flags the unconditional .toJson() call. `?.`
+      // sidesteps that entirely.
+      if (TypeMapper.isRefType(optionInnerType)) {
+        return '$fieldName?.toJson()';
+      }
+
       final inner = _getToJsonExpression(fieldName, optionInnerType);
       if (inner == fieldName) {
         return fieldName;
